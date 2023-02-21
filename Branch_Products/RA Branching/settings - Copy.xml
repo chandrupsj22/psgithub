@@ -1,0 +1,658 @@
+<project application="Reference Architecture" compPrefix="RA">
+	<components template="Reference Architecture Component">
+		<component name="BitbucketTestRepo" type="application" versioned="no" tier="web" sourcetype="bitbucket" ra2="true" project="chandrunandha">
+			<property name="warFile">Assist.war</property>
+			<property name="configFile">assist.cfg</property>
+			<property name="webhelp">assistportal</property>
+			<tag name="RA_WebHelp" />
+			<environment name="DEV"/>
+			<environment name="ST1"/>
+			<environment name="ST2"/>
+			<environment name="CTT"/>
+			<environment name="PRD"/>
+		</component>
+		<!--<component name="atlas-impl" type="module" moduleType="Atlas" impl="true" remote="false" sourcetype="perforce"/>
+		<component name="atlas-remote" type="module" moduleType="Atlas" impl="false" remote="true" sourcetype="perforce" />-->
+		<component name="testrepoDemo" type="module" sourcetype="bitbucket" ra2="true" project="chandrunandha"/>
+		<component name="testrepo123" type="module" sourcetype="bitbucket" ra2="true" project="chandrunandha"/>
+		<component name="testrepoDemo" type="module" sourcetype="bitbucket" ra3="true" project="chandrunandha"/>
+		<component name="GitHubTestRepo" type="module" sourcetype="github" ra2="true" project="chandrupsj22"/>
+		<component name="repo1" type="module" moduleType="Common" impl="true" remote="false" sourcetype="bitbucket" ra3="true" project="chandrunandha"/>
+		<component name="rebase" type="module" sourcetype="github" ra3="true" project="chandrupsj22"/>
+		<component name="Java" type="module" sourcetype="github" ra2="true" project="chandrupsj22"/>
+		<!--<component name="RabbitCommons2" sourcetype="bitbucket" project="chandrunandha" />-->
+		<!-- RA 2.0 Components -->
+		<!-- This is ConfigServer -->
+		<component name="BitbucketTestRepo" versioned="no" tier="ra3_hub" ra2only="true" port="8080">
+			<environment name="DEV"/>
+			<environment name="PRD2"/>
+		</component>
+        <component name="BitbucketTestRepo" versioned="no" tier="ra3_web" sourcetype="bitbucket" project="chandrunandha" ra2only="true" port="48080">
+			<environment name="DEV"/>
+			<environment name="PRD"/>
+		</component>
+		<!--<component name="PingServices" sourcetype="bitbucket" project="chandrunandha" ra2only="true" />-->
+		<!-- <component name="ApplicationConfigurations" sourcetype="bitbucket" project="chandrunandha" ra2only="true" />-->
+        <!-- Hopefully this doesn't break anything. ApplicationConfigurations needs to branch from dev to both release/xxxx and release/2.xxxx -->
+        <!-- <component name="ApplicationConfigurations" sourcetype="bitbucket" project="chandrunandha" />-->
+        <!-- <component name="BIFileExportManager" sourcetype="bitbucket" project="chandrunandha" ra2only="true"/> -->
+        <!--<component name="MontrealRoot" sourcetype="bitbucket" project="chandrunandha" />-->
+        <!-- The chandrunandha_CONFIGS project contains the settings used by applications configured to use Spring Config Server. They need to be branched with other RA products. -->
+        <component name="testrepo123" sourcetype="bitbucket" project="chandrunandha" ra3="true"/>
+		<component name="GitHubTestRepo" type="module" sourcetype="github" ra3="true" project="chandrupsj22"/>
+      	<!-- VTS projects for branching -->  
+      	<!-- VTS Flex Repos -->
+		<component name="testrepoDemo" sourcetype="bitbucket" project="chandrunandha" />
+	</components>
+	<environments templates="RA Vaults">
+		<environment name="DEV">
+			<loadbalancers>
+              	<loadbalancer name="F5HubNP" ip="10.25.240.238" ip2="10.25.240.238">
+			        <partitions>
+                         <partition name="managed233">
+					        <virtualservers>
+					        </virtualservers>
+					     </partition>
+					 </partitions>
+				</loadbalancer>
+				<loadbalancer name="F5WebDEV" ip="10.25.240.237" url="https://iowacbipvue07.pvue.dcsroot.local/xui/">
+					<partitions name="managed">
+						<partition>
+							<virtualservers>
+								<virtualserver name="dev_assistportal" pool="dev_assistportal_pool_"/>
+							</virtualservers>
+						</partition>
+					</partitions>
+				</loadbalancer>
+			</loadbalancers>	
+			<server tier="HUB" name="A" server="wsidev1a.pv.local" ip="10.25.233.131" group="VUE2">
+				<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+				<property name="JBoss_WN/serviceName">JBossEAP6</property>
+				<property name="JBOSS_Vault_Receiver/application">hub</property>
+				<tag name="JBoss_WN" />
+				<tag name="JBoss_DC" />
+			</server>
+			<!-- Dummy server for testing
+			<server tier="TAX" name="X" server="wsidev1a.pv.local" ip="127.0.0.1" group="VUE2">
+				<property name="jboss_home">D:\JBoss</property>
+				<property name="JBoss_WN/serviceName">JBossEAP6</property>
+				<property name="JBoss_DC/JBossController">hubdev-console.vue.com:19999</property>
+				<property name="JBoss_DC/ServiceName">JBossEAP6-Master</property>
+				<property name="JBoss_DC/ServerGroup">VUE1,VUE2</property>
+				<property name="JBOSS_Vault_Receiver/type">domain</property>
+				<property name="JBOSS_Vault_Receiver/application">hub</property>
+				<tag name="JBoss_WN" />
+			</server>
+			-->
+			<server tier="HUB" name="B" server="wsidev1b.pv.local" ip="10.25.233.132" group="VUE1">
+				<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+				<property name="JBoss_WN/serviceName">JBossEAP6</property>
+				<property name="JBOSS_Vault_Receiver/application">hub</property>
+				<tag name="JBoss_WN" />
+			</server>
+			<server tier="TAX" name="D" server="wsidev1d.pv.local" ip="10.25.232.140" group="VUE1">
+				<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+				<property name="JBoss_WN/serviceName">JBossEAP6</property>
+				<property name="JBOSS_Vault_Receiver/application">hub</property>
+				<tag name="JBoss_WN" />
+				<tag name="RA2" />
+				<tag name="JBOSS_DC"/>
+				<tag name="TAX" />				
+			</server>
+          	<server tier="RA2_HUB" name="E" server="wsidev1e.pv.local" ip="10.25.233.10">
+				<tag name="RA2" />
+			</server>
+          	<server tier="RA2_HUB" name="F" server="wsidev1f.pv.local" ip="10.25.233.16">
+				<tag name="RA2" />
+			</server>
+          	<server tier="RA2_HUB" name="G" server="wsidev1g.pv.local" ip="10.25.233.17">
+				<tag name="RA2" />
+			</server>
+			<server tier="WEB" name="A" server="wrcdev1a.pv.local" ip="10.25.245.180" group="VUE1">
+				<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+				<property name="JBoss_WN/serviceName">JBossEAP6</property>
+				<property name="JBOSS_Vault_Receiver/application">web</property>
+				<tag name="JBoss_WN" />
+				<tag name="JBoss_DC" />
+			</server>
+			<server tier="WEB" name="B" server="wrcdev1b.pv.local" ip="10.25.245.181" group="VUE2">
+				<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+				<property name="JBoss_WN/serviceName">JBossEAP6</property>
+				<property name="JBOSS_Vault_Receiver/type">domain</property>
+				<property name="JBOSS_Vault_Receiver/application">web</property>
+				<tag name="JBoss_WN" />
+			</server>
+			<db tier="DB" name="DB" agent="agent2-bldprd1b-depsvc1">
+				<component name="CandidatePortalServices" project="CPS" dbName="vuedev" changelog="data/migrations/changelog-master-test.xml" />
+				<component name="BitbucketTestRepo" project="CAS" dbName="cas" changelog="data/migrations/changelog-master.xml" />
+				<component name="PaymentServices" project="PAYS" dbName="Payment" changelog="data/migrations/changelog-master.xml" />
+			</db>
+			<property name="dbServer">porter.pearsonvue.com</property>
+			<property name="dbServerPort">33508</property>
+		</environment>
+		<environment name="ST1">
+			<loadbalancers>
+				<loadbalancer name="F5HubNP" ip="10.25.240.238" ip2="10.25.240.238">
+					<partitions>
+						<partition name="managed233">
+							<virtualservers>
+								<virtualserver>
+								</virtualserver>
+							</virtualservers>
+						</partition>
+					</partitions>
+				</loadbalancer>
+			</loadbalancers>	
+			<server tier="HUB" name="A" server="wsitst1a.pv.local" ip="10.25.233.125" group="VUE1">
+				<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+				<property name="JBoss_WN/serviceName">JBossEAP6</property>
+				<property name="JBOSS_Vault_Receiver/application">hub</property>
+				<tag name="JBoss_WN" />
+				<tag name="JBoss_DC" />
+				<tag name="RA2" />
+			</server>
+			<server tier="HUB" name="B" server="wsitst1b.pv.local" ip="10.25.233.126" group="VUE2">
+				<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+				<property name="JBoss_WN/serviceName">JBossEAP6</property>
+				<property name="JBOSS_Vault_Receiver/type">domain</property>
+				<property name="JBOSS_Vault_Receiver/application">hub</property>
+				<tag name="JBoss_WN" />
+				<tag name="RA2" />
+			</server>
+			<server tier="TAX" name="A" server="wsitst1d.pv.local" ip="10.25.232.142" group="VUE1">
+				<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+				<property name="JBoss_WN/serviceName">JBossEAP6</property>
+				<property name="JBOSS_Vault_Receiver/application">hub</property>
+				<tag name="JBoss_WN" />
+				<tag name="JBoss_DC" />
+				<tag name="RA2" />
+				<tag name="TAX" />
+			</server>
+          	<server tier="RA2_HUB" name="E" server="wsitst1e.pv.local" ip="10.25.233.11">
+				<tag name="RA2" />
+			</server>
+          	<server tier="RA2_HUB" name="F" server="wsitst1f.pv.local" ip="10.25.233.86">
+				<tag name="RA2" />
+			</server>
+          	<server tier="RA2_HUB" name="G" server="wsitst1g.pv.local" ip="10.25.233.94">
+				<tag name="RA2" />
+			</server>
+			<server tier="WEB" name="A" server="wrctst1a.pv.local" ip="10.25.245.197" group="VUE1">
+				<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+				<property name="JBoss_WN/serviceName">JBossEAP6</property>
+				<property name="JBOSS_Vault_Receiver/application">web</property>
+				<tag name="JBoss_WN" />
+				<tag name="JBoss_DC" />
+			</server>
+			<server tier="WEB" name="B" server="wrctst1b.pv.local" ip="10.25.245.198" group="VUE2">
+				<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+				<tag name="JBoss_WN" />
+			</server>
+			<db tier="DB" name="DB" agent="agent2-bldprd1b-depsvc1">
+				<component name="CandidatePortalServices" project="CPS" dbName="vuetest" changelog="data/migrations/changelog-master.xml" />
+				<component name="PaymentServices" project="PAYS" dbName="Payment" changelog="data/migrations/changelog-master.xml" />
+			</db>
+			<property name="dbServer">cider.pearsonvue.com</property>
+			<property name="dbServerPort">33508</property>
+		</environment>
+		<environment name="ST2">
+			<loadbalancers>
+				<loadbalancer name="F5Hub" ip="10.25.240.238">
+					<partitions>
+						<partition>
+							<virtualservers>
+								<virtualserver>
+								</virtualserver>
+							</virtualservers>
+						</partition>
+					</partitions>
+				</loadbalancer>
+			</loadbalancers>	
+			<server tier="HUB" name="A" server="wsitst2a.pv.local" ip="10.25.233.133" group="VUE1">
+				<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+				<property name="JBoss_WN/serviceName">JBossEAP6</property>
+				<property name="JBOSS_Vault_Receiver/application">hub</property>
+				<tag name="JBoss_WN" />
+				<tag name="JBoss_DC" />
+				<tag name="RA2" />
+			</server>
+			<server tier="HUB" name="B" server="wsitst2b.pv.local" ip="10.25.233.134" group="VUE2">
+				<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+				<property name="JBoss_WN/serviceName">JBossEAP6</property>
+				<property name="JBOSS_Vault_Receiver/type">domain</property>
+				<property name="JBOSS_Vault_Receiver/application">hub</property>
+				<tag name="JBoss_WN" />
+				<tag name="RA2" />
+			</server>
+          	<server tier="RA2_HUB" name="E" server="wsitst2e.pv.local" ip="10.25.233.12">
+				<tag name="RA2" />
+			</server>
+          	<server tier="RA2_HUB" name="F" server="wsitst2f.pv.local" ip="10.25.233.99">
+				<tag name="RA2_RA2" />
+			</server>
+          	<server tier="RA2_HUB" name="G" server="wsitst2g.pv.local" ip="10.25.233.104">
+				<tag name="RA2" />
+			</server>
+			<server tier="TAX" name="D" server="wsitst2d.pv.local" ip="10.25.232.144" group="VUE1">
+				<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+				<property name="JBoss_WN/serviceName">JBossEAP6</property>
+				<property name="JBoss_DC/ServerGroup">VUE1</property>
+				<tag name="JBoss_DC" />
+				<tag name="JBoss_WN" />
+				<tag name="RA2" />
+                <tag name="TAX" />
+			</server>
+			<server tier="WEB" name="A" server="wrctst2a.pv.local" ip="10.25.245.215" group="VUE1">
+				<property name="jboss_home">D:\JBoss</property>
+				<property name="JBoss_WN/serviceName">JBossEAP6</property>
+				<property name="JBOSS_Vault_Receiver/application">web</property>
+				<tag name="JBoss_WN" />
+				<tag name="JBoss_DC" />
+			</server>
+			<server tier="WEB" name="B" server="wrctst2b.pv.local" ip="10.25.245.216" group="VUE2">
+				<property name="jboss_home">D:\JBoss</property>
+				<property name="JBoss_WN/serviceName">JBossEAP6</property>
+				<property name="JBOSS_Vault_Receiver/type">domain</property>
+				<property name="JBOSS_Vault_Receiver/application">web</property>
+				<tag name="JBoss_WN" />
+			</server>
+			<db tier="DB" name="DB" agent="agent2-bldprd1b-depsvc1">
+				<component name="CandidatePortalServices" project="CPS" dbName="vuetest" changelog="data/migrations/changelog-master.xml" />
+				<component name="BitbucketTestRepo" project="CAS" dbName="cas" changelog="data/migrations/changelog-master.xml" />
+				<component name="PaymentServices" project="PAYS" dbName="Payment" changelog="data/migrations/changelog-master.xml" />
+			</db>
+			<property name="dbServer">malibu.pearsonvue.com</property>
+			<property name="dbServerPort">33508</property>
+		</environment>
+		<environment name="CTT">
+			<loadbalancers> <!-- ip and ip2 set to same address for CTT Hub as there is not a passive node. -->
+              	<!-- Commenting out hub as we never want to flip these pools according to Gene 20190904 -->
+				<loadbalancer name="F5HubNP" ip="10.25.240.238" ip2="10.25.240.238" url="https://iowacbipvue07.pvue.dcsroot.local/xui/">
+                  	<partitions>
+						<partition name="managed">
+							<virtualservers>
+								<!-- commenting out the virtual servers only as we use settings.xml details for rotational deployments -->                             
+								<!-- <virtualserver name="ctt_fms" pool="ctt_fms_pool_" />
+                              	<virtualserver name="ctt_fms2" pool="ctt_fms_pool_" /> -->
+							</virtualservers>
+						</partition>
+                        <partition name="managed233">
+							<virtualservers>
+								<!-- <virtualserver name="ctt_appsint" pool="ctt_appsint_pool_" />
+								<virtualserver name="ctt_appsint2" pool="ctt_appsint_pool_" />
+								<virtualserver name="ctt_hubws" pool="ctt_hubws_pool_" />
+								<virtualserver name="ctt_hubws4" pool="ctt_hubws_pool_" />
+								<virtualserver name="ctt_hubws2" pool="ctt_hubws_pool_" /> -->
+							</virtualservers>
+						</partition>
+					</partitions>
+      			</loadbalancer>
+     	  		<loadbalancer name="F5WebCTT" ip="10.25.240.236" ip2="10.25.240.251" url="https://iowacbipvue03.pvue.dcsroot.local/xui/">
+					<partitions> 
+						<partition name="managed">
+							<virtualservers>
+								<virtualserver name="ctt_cw" pool="ctt_cw_pool_" /> 
+								<virtualserver name="ctt_mba" pool="ctt_mba_pool_" />
+								<!-- removed <virtualserver name="ctt_mstr" pool="ctt_mstr_pool_" val="true"/> -->
+								<virtualserver name="ctt_wsr" pool="ctt_wsr_pool_" val="true"/>
+								<virtualserver name="ctt_wsr2" pool="ctt_wsr_pool_" />
+								<virtualserver name="ctt_wsr4" pool="ctt_wsr4_pool_" />
+								<virtualserver name="ctt_www" pool="ctt_www_pool_" val="true"/>
+								<!---<virtualserver name="ctt_www2" pool="ctt_www_pool_" /> apparently removed -->
+								<virtualserver name="ctt_assistportal" pool="ctt_assistportal_pool_" val="true"/>
+								<virtualserver name="ctt_webctt_getior" pool="ctt_webctt_getior_pool_" val="true"/>
+								<virtualserver name="ctt_gks_gk443" pool="ctt_gks_gk443_pool_" />                              
+							</virtualservers>
+						</partition>
+					</partitions>   
+      	</loadbalancer>
+			</loadbalancers>
+			<server tier="HUB" name="A" server="wsictt1a.pv.local" ip="10.25.233.149" group="VUE1">
+				<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+				<property name="JBoss_WN/serviceName">JBossEAP6</property>
+				<property name="JBOSS_Vault_Receiver/application">hub</property>
+				<tag name="JBoss_WN" />
+				<tag name="JBoss_DC" />
+				<tag name="RA2" />
+			</server>
+			<server tier="HUB" name="B" server="wsictt1b.pv.local" ip="10.25.233.150" group="VUE2">
+				<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+				<property name="JBoss_WN/serviceName">JBossEAP6</property>
+				<property name="JBOSS_Vault_Receiver/type">domain</property>
+				<property name="JBOSS_Vault_Receiver/application">hub</property>
+				<tag name="JBoss_WN" />
+				<tag name="RA2" />
+			</server>
+			<server tier="TAX" name="C" server="wsictt1c.pv.local" ip="10.25.232.154" group="VUE1">
+				<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+				<property name="JBoss_WN/serviceName">JBossEAP6</property>
+				<property name="JBOSS_Vault_Receiver/application">hub</property>
+				<tag name="JBoss_WN" />
+				<tag name="JBoss_DC" />
+				<tag name="RA2" />
+				<tag name="TAX" />
+			</server>
+          	<server tier="RA2_HUB" name="D" server="wsictt1d.pv.local" ip="10.25.233.192">
+				<tag name="RA2" />
+			</server>
+          	<!--<server tier="RA2_HUB" name="E" server="wsictt1e.pv.local" ip="10.25.233.203">
+				<tag name="RA2" />
+			</server>
+          	<server tier="RA2_HUB" name="F" server="wsictt1f.pv.local" ip="10.25.233.204">
+				<tag name="RA2_RA2" />
+			</server>
+          	<server tier="RA2_HUB" name="G" server="wsictt1g.pv.local" ip="10.25.232.104">
+				<tag name="RA2" />
+			</server>-->
+			<server tier="WEB" name="A" server="wrcctt1a.pearsonvue.com" ip="10.25.234.185" group="VUE1">
+				<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+				<property name="JBoss_WN/serviceName">JBossEAP6</property>
+				<property name="JBOSS_Vault_Receiver/application">web</property>
+				<tag name="JBoss_WN" />
+				<tag name="JBoss_DC" />
+			</server>
+			<server tier="WEB" name="B" server="wrcctt1b.pearsonvue.com" ip="10.25.234.186" group="VUE2">
+				<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+				<property name="JBoss_WN/serviceName">JBossEAP6</property>
+				<property name="JBOSS_Vault_Receiver/type">domain</property>
+				<property name="JBOSS_Vault_Receiver/application">web</property>
+				<tag name="JBoss_WN" />
+			</server>
+			<db tier="DB" name="DB" agent="agent2-bldprd1b-depsvc1">
+				<component name="CandidatePortalServices" project="CPS" dbName="vue" changelog="data/migrations/changelog-master-test.xml" />
+				<component name="BitbucketTestRepo" project="CAS" dbName="cas" changelog="data/migrations/changelog-master.xml" />
+				<component name="PaymentServices" project="PAYS" dbName="Payment" changelog="data/migrations/changelog-master.xml" />
+			</db>
+			<property name="dbServer">jager.pearsonvue.com</property>
+			<property name="dbServerPort">33508</property>
+		</environment>
+		
+		<environment name="LOAD">
+			<server tier="HUB" name="A" server="ue1rrhc1nna01.pvdmz.local" ip="192.168.140.19" group="VUE1">
+				<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+				<property name="JBoss_WN/serviceName">JBossEAP6</property>
+				<property name="JBOSS_Vault_Receiver/application">hub</property>
+				<tag name="JBoss_WN" />
+				<tag name="JBoss_DC" />
+				<tag name="RA2" />
+			</server>
+			<server tier="HUB" name="B" server="ue1rrhc1nna02.pvdmz.local" ip="192.168.140.197" group="VUE2">
+				<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+				<property name="JBOSS_Vault_Receiver/application">hub</property>
+				<tag name="JBoss_WN" />
+				<tag name="RA2" />
+			</server>
+			<db tier="DB" name="DB" agent="agent2-bldprd1b-depsvc1">
+				<component name="BitbucketTestRepo" project="CAS" dbName="cas" changelog="data/migrations/changelog-master.xml" />
+				<component name="TaxServices" project="TAX" dbName="vtslogging" changelog="data/migrations/changelog-master.xml" />
+			</db>
+			<property name="dbServer">reanpvue.crldycfefdoc.us-east-1.rds.amazonaws.com</property>
+			<property name="dbServerPort">33508</property>
+		</environment>
+		<environment name="PRD2">
+			<server tier="HUB" name="I" server="wsiprd1i.pv.local" ip="10.25.246.114" group="VUE1">
+				<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+				<property name="JBoss_WN/serviceName">JBossEAP6</property>
+				<property name="JBOSS_Vault_Receiver/application">hub</property>
+				<tag name="JBoss_WN" />
+				<tag name="JBoss_DC" />
+				<tag name="RA2" />
+			</server>
+			<server tier="HUB" name="J" server="wsiprd1j.pv.local" ip="10.25.246.118" group="VUE2">
+				<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+				<property name="JBOSS_Vault_Receiver/application">hub</property>
+				<tag name="JBoss_WN" />
+				<tag name="RA2" />
+			</server>
+			<server tier="HUB" name="K" server="wsiprd1k.pv.local" ip="10.25.246.182" group="VUE3">
+				<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+				<property name="JBOSS_Vault_Receiver/application">hub</property>
+				<tag name="JBoss_WN" />
+				<tag name="RA2" />
+			</server>
+ 			<server tier="RA2_HUB" name="O" server="wsiprd2o.pv.local" ip="10.25.246.102">
+              	<tag name="RA2" />
+          	</server>
+			<server tier="RA2_HUB" name="P" server="wsiprd2p.pv.local" ip="10.25.246.190">
+              	<tag name="RA2" />
+          	</server>
+			<server tier="RA2_HUB" name="Q" server="wsiprd2q.pv.local" ip="10.25.246.254">
+              	<tag name="RA2" />
+          	</server>           
+			<db tier="DB" name="DB" agent="agent2-bldprd1b-depsvc1">
+				<component name="BitbucketTestRepo" project="CAS" dbName="cas" changelog="data/migrations/changelog-master.xml" />
+				<component name="TaxServices" project="TAX" dbName="vtslogging" changelog="data/migrations/changelog-master.xml" />
+			</db>
+			<property name="dbServer">pronto2.pearsonvue.com</property>
+			<property name="dbServerPort">14300</property>
+		</environment>
+		<environment name="PRD">
+				<loadbalancers>
+                    <!-- Commenting out hub as we never want to flip these pools according to Gene 20190904
+        	        <loadbalancer name="F5HubPRD" ip="10.25.240.235" ip2="10.25.240.252">
+			            <partitions>
+                             <partition name="managed">
+							        <virtualservers>
+								        <virtualserver name="prd_appsint" pool="prd_appsint_pool_" />
+								        <virtualserver name="prd_appsint2" pool="prd_appsint_pool_" />
+								        <virtualserver name="prd_fms" pool="prd_fms_pool_" />
+								        <virtualserver name="prd_fms2" pool="prd_fms_pool_" />
+								        <virtualserver name="prd_hubws2" pool="prd_hubws_pool_" />
+								        <virtualserver name="prd_hubws3" pool="prd_hubws_pool_" />
+							        </virtualservers>
+						     </partition>
+						 </partitions>
+					 </loadbalancer>
+					 -->
+					 <loadbalancer name="F5WebPRD" ip="10.25.240.229" ip2="10.25.240.230">
+						 <partitions>
+						       <partition name="managed">
+								     <virtualservers>
+								         <virtualserver name="prd_cw" pool="prd_cw_pool_" />
+								         <virtualserver name="prd_mba" pool="prd_mba_pool_" />
+								         <!-- rnemoved <virtualserver name="prd_mstr" pool="prd_mstr_pool_" val="true"/> -->
+								         <virtualserver name="prd_wsr" pool="prd_wsr_pool_" val="true"/>
+								         <virtualserver name="prd_wsr2" pool="prd_wsr_pool_" />
+								         <virtualserver name="prd_wsr3" pool="prd_wsr3_pool_" />
+								         <!-- removed <virtualserver name="prd_wsr4" pool="prd_wsr4_pool_" />-->
+								         <virtualserver name="prd_www" pool="prd_www_pool_" val="true"/>
+								         <virtualserver name="prd_www2" pool="prd_www_pool_" />
+								         <virtualserver name="prd_svc_ibt" pool="prd_svc_ibt_pool_" val="true"/>
+								         <virtualserver name="prd_svc_apps" pool="prd_svc_apps_pool_" val="true" />
+								         <!-- removed<virtualserver name="prd_svc_appscf" pool="prd_svc_appscf_pool_" /> -->
+								         <!-- removed<virtualserver name="prd_svc_appsdr" pool="prd_svc_appsdr_pool_" /> -->
+								         <virtualserver name="prd_svc_ws" pool="prd_svc_ws_pool_" val="true"/>
+								         <virtualserver name="prd_gks_gk443" pool="prd_gks_gk443_pool_" />
+								     </virtualservers>
+						      </partition>
+                        </partitions>       
+        	        </loadbalancer>
+				</loadbalancers>
+			<!-- removing WSIPRD1D for 1611, making WSIPRD1A the DC (master)
+			<server tier="HUB" name="A" server="wsiprd1d.pv.local" ip="10.25.246.173" group="VUE1">
+				<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+				<property name="JBoss_WN/serviceName">JBossEAP6</property>
+				<property name="JBOSS_Vault_Receiver/type">domain</property>
+				<property name="JBOSS_Vault_Receiver/application">hub</property>
+				<tag name="JBoss_WN" />
+			</server>
+			-->
+			<server tier="HUB" name="A" server="wsiprd1a.pv.local" ip="10.25.246.172" group="VUE1">
+				<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+				<property name="JBoss_WN/serviceName">JBossEAP6</property>
+				<property name="JBOSS_Vault_Receiver/application">hub</property>
+				<tag name="JBoss_WN" />
+				<tag name="JBoss_DC" />
+				<tag name="RA2" />
+			</server>
+			<server tier="HUB" name="B" server="wsiprd1b.pv.local" ip="10.25.246.151" group="VUE2">
+				<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+				<property name="JBoss_WN/serviceName">JBossEAP6</property>
+				<property name="JBOSS_Vault_Receiver/type">domain</property>
+				<property name="JBOSS_Vault_Receiver/application">hub</property>
+				<tag name="JBoss_WN" />
+				<tag name="RA2" />
+			</server>
+			<server tier="HUB" name="C" server="wsiprd1c.pv.local" ip="10.25.246.187" group="VUE3">
+				<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+				<property name="JBoss_WN/serviceName">JBossEAP6</property>
+				<property name="JBOSS_Vault_Receiver/type">domain</property>
+				<property name="JBOSS_Vault_Receiver/application">hub</property>
+				<tag name="JBoss_WN" />
+				<tag name="RA2" />
+			</server>
+			<server tier="HUB" name="G" server="wsiprd1g.pv.local" ip="10.25.246.108" group="VUE1">
+				<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+				<property name="JBoss_WN/serviceName">JBossEAP6</property>
+				<property name="JBOSS_Vault_Receiver/type">domain</property>
+				<property name="JBOSS_Vault_Receiver/application">hub</property>
+				<tag name="JBoss_WN" />
+				<tag name="RA2" />
+			</server>
+			<server tier="HUB" name="H" server="wsiprd1h.pv.local" ip="10.25.246.109" group="VUE2">
+				<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+				<property name="JBoss_WN/serviceName">JBossEAP6</property>
+				<property name="JBOSS_Vault_Receiver/type">domain</property>
+				<property name="JBOSS_Vault_Receiver/application">hub</property>
+				<tag name="JBoss_WN" />
+				<tag name="RA2" />
+			</server>
+			<server tier="TAX" name="L" server="wsiprd1l.pv.local" ip="10.25.246.192" group="VUE1">
+				<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+				<property name="JBoss_WN/serviceName">JBossEAP6</property>
+				<property name="JBOSS_Vault_Receiver/type">domain</property>
+				<property name="JBOSS_Vault_Receiver/application">hub</property>
+				<tag name="JBoss_WN" />
+				<tag name="JBoss_DC" />
+				<tag name="RA2" />
+			</server>
+			<server tier="RA2_HUB" name="O" server="wsiprd1o.pv.local" ip="10.25.246.101">
+              	<tag name="RA2" />
+          	</server>
+			<server tier="RA2_HUB" name="P" server="wsiprd1p.pv.local" ip="10.25.246.189">
+              	<tag name="RA2" />
+          	</server>
+			<server tier="RA2_HUB" name="Q" server="wsiprd1q.pv.local" ip="10.25.246.191">
+              	<tag name="RA2" />
+          	</server>  
+			<server tier="TAX" name="M" server="wsiprd1m.pv.local" ip="10.25.246.193" group="VUE2">
+				<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+				<property name="JBoss_WN/serviceName">JBossEAP6</property>
+				<property name="JBOSS_Vault_Receiver/type">domain</property>
+				<property name="JBOSS_Vault_Receiver/application">hub</property>
+				<tag name="JBoss_WN" />
+				<tag name="RA2" />
+			</server>
+			<server tier="TAX" name="N" server="wsiprd1n.pv.local" ip="10.25.246.235" group="VUE3">
+				<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+				<property name="JBoss_WN/serviceName">JBossEAP6</property>
+				<property name="JBOSS_Vault_Receiver/type">domain</property>
+				<property name="JBOSS_Vault_Receiver/application">hub</property>
+				<tag name="JBoss_WN" />
+				<tag name="RA2" />
+			</server>
+
+<!--		WSIPRD1E has been removed until ATS can fix
+				<server tier="HUB" name="E" server="wsiprd1e.pv.local" ip="10.25.246.188" group="VUE2">
+				<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+				<property name="JBoss_WN/serviceName">JBossEAP6</property>
+				<property name="JBOSS_Vault_Receiver/type">domain</property>
+				<property name="JBOSS_Vault_Receiver/application">hub</property>
+				<tag name="JBoss_WN" />
+			</server>-->
+
+			<server tier="WEB" name="A" server="wrcprd1a.pearsonvue.com" ip="10.25.244.131" group="VUE1">
+				<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+				<property name="JBoss_WN/serviceName">JBossEAP6</property>
+				<property name="JBOSS_Vault_Receiver/application">web</property>
+				<tag name="JBoss_WN" />
+				<tag name="JBoss_DC" />
+			</server>
+			<server tier="WEB" name="B" server="wrcprd1b.pearsonvue.com" ip="10.25.244.132" group="VUE2">
+				<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+				<property name="JBoss_WN/serviceName">JBossEAP6</property>
+				<property name="JBOSS_Vault_Receiver/type">domain</property>
+				<property name="JBOSS_Vault_Receiver/application">web</property>
+				<tag name="JBoss_WN" />
+			</server>
+			<server tier="WEB" name="C" server="wrcprd1c.pearsonvue.com" ip="10.25.244.139" group="VUE1">
+				<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+				<property name="JBoss_WN/serviceName">JBossEAP6</property>
+				<property name="JBOSS_Vault_Receiver/type">domain</property>
+				<property name="JBOSS_Vault_Receiver/application">web</property>
+				<tag name="JBoss_WN" />
+			</server>
+			<server tier="WEB" name="D" server="wrcprd1d.pearsonvue.com" ip="10.25.244.144" group="VUE2">
+				<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+				<property name="JBoss_WN/serviceName">JBossEAP6</property>
+				<property name="JBOSS_Vault_Receiver/type">domain</property>
+				<property name="JBOSS_Vault_Receiver/application">web</property>
+				<tag name="JBoss_WN" />
+			</server>
+			<db tier="DB" name="DB" agent="agent2-bldprd1b-depsvc1">
+				<component name="CandidatePortalServices" project="CPS" dbName="vue" changelog="data/migrations/changelog-master-test.xml" />
+				<component name="BitbucketTestRepo" project="CAS" dbName="cas" changelog="data/migrations/changelog-master.xml" />
+				<component name="BitbucketTestRepo" project="CCS" dbName="cloudcontrol" changelog="data/migrations/changelog-master.xml" />
+			</db>
+		</environment>
+		<environment name="DR">
+		  <server tier="hub" name="A" server="wsidrs1a.pv.local" ip="">
+			<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+			<property name="JBOSS_Vault_Receiver/application">hub</property>
+			<property name="JBOSS_Vault_Receiver/type">domain</property>
+			<property name="JBoss_WN/serviceName">JBossEAP6</property>
+			<tag name="JBOSS_Vault_Receiver" />
+			<tag name="JBoss_WN" />
+			<tag name="RA_Hub_WN" />
+		  </server>
+		    <server tier="web" name="A" server="wrcdrs1a.pearsonvue.com" ip="">
+			<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+			<property name="JBOSS_Vault_Receiver/application">web</property>
+			<property name="JBOSS_Vault_Receiver/type">domain</property>
+			<property name="JBoss_WN/serviceName">JBossEAP6</property>
+			<tag name="JBOSS_Vault_Receiver" />
+			<tag name="JBoss_WN" />
+			<tag name="RA_Web_WN" />
+		  </server>
+		  <server tier="web" name="B" server="wrcdrs1b.pearsonvue.com" ip="">
+			<property name="jboss_home">D:\JBoss\jboss-eap-6.2</property>
+			<property name="JBOSS_Vault_Receiver/application">web</property>
+			<property name="JBOSS_Vault_Receiver/type">domain</property>
+			<property name="JBoss_WN/serviceName">JBossEAP6</property>
+			<tag name="JBOSS_Vault_Receiver" />
+			<tag name="JBoss_WN" />
+			<tag name="RA_Web_WN" />
+		  </server>
+		  <server tier="controller" name="Clusters" server="wrcdrs1a.pearsonvue.com">
+			<group tier="web" name="VUE1">
+			  <property name="JBoss_DC/JBossController">wrcdr-console.vue.com:19999</property>
+			  <property name="JBoss_DC/ServerGroup">VUE1,VUE2</property>
+			  <property name="JBoss_DC/ServiceName">JBossEAP6-Master</property>
+			  <property name="JBoss_DC/tier">hub</property>
+			  <property name="RA_Hub_DC/ServiceName">JBossEAP6-Master</property>
+			  <tag name="JBoss_DC" />
+			  <tag name="RA_Web_DC" />
+			</group>
+		  </server>
+		</environment>
+	</environments>
+	<releases>
+		<release name="1504" incept="1252133" branch="1265985" />
+		<release name="1505" incept="1265985" branch="1267730" />
+		<release name="1506" incept="1267730" branch="1279740" />
+		<release name="1507" incept="1279740" branch="1291604" />
+		<release name="1508" incept="1291604" branch="1303832" />
+		<release name="1509" incept="1303832" branch="1317330"/>
+		<release name="1510" incept="1317330" branch="1330579" />
+		<release name="1511" incept="1330579" />
+		<release name="1604" incept="1330579" branch="1414427" />
+        <release name="1605" incept="1414427" branch="1423767" />
+        <release name="1606" incept="1423767" branch="1432426"/>
+		<release name="1607" incept="1432426" branch="1445894" />
+        <release name="1608" incept="1445894" />
+		<release name="1609" branch="1463726" />
+		<release name="1610" incept="1463726" />
+		<release name="1612" branch="1494810" />
+		<release name="1701" incept="1494810" />
+	</releases>
+</project>

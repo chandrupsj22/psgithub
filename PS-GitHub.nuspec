@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package>
+	<metadata>
+		<id>PS-GitHub</id>
+		<version>1.0.0</version>
+		<authors>Tejaswi Anupindi</authors>
+		<owners>Pearson VUE</owners>
+		<projectUrl>https://api.github.com/repos/chandrupsj22/GitHubTestR</projectUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>Wrapped functions for Perforce.</description>
+		<tags>Powershell module GitHub</tags>
+		<copyright>Copyright 2016</copyright>
+<!-- 		<dependencies>
+			<dependency id="udclient" />
+		</dependencies> -->
+	</metadata>
+	<files>
+		<file src="\**" target="\" exclude="Set-DevEnvironment.ps1;*.Tests.ps1" />
+	</files>
+</package>
